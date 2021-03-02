@@ -17,7 +17,7 @@ export default {
   deleteBook: id => {
     return axios.delete('/api/books' + id);
   },
-  // Search all books.
+  // Search books by search term.
   searchBooks: name => {
     return axios.get('https://www.googleapis.com/books/v1/volumes?q=' + name)
   },
