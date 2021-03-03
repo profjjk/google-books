@@ -5,10 +5,6 @@ export default {
   getBooks: () => {
     return axios.get('/api/books');
   },
-  // Get single book from database.
-  getBook: id => {
-    return axios.get('/api/books/' + id);
-  },
   // Save book data to database.
   saveBook: data => {
     return axios.post('/api/books', data);
