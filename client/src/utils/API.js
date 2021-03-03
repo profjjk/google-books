@@ -11,7 +11,7 @@ export default {
   },
   // Delete book from database.
   deleteBook: id => {
-    return axios.delete('/api/books' + id);
+    return axios.delete('/api/books/' + id);
   },
   // Search books by search term.
   searchBooks: name => {

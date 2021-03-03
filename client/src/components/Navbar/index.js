@@ -10,8 +10,8 @@ function Navbar() {
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
-            <a className="nav-link" href="#">Search</a>
-            <a className="nav-link" href="#">Saved</a>
+            <a className="nav-link" href="/search">Search</a>
+            <a className="nav-link" href="/saved">Saved</a>
           </div>
         </div>
       </div>
