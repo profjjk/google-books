@@ -1,44 +1,57 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import API from '../utils/API';
-import SearchForm from '../components/SearchForm';
 import Header from '../components/Header';
+import SearchForm from '../components/SearchForm';
+import SearchResults from '../components/SearchResults';
 
-function Search() {
-  const [results, setResults] = useState([]);
-  const [search, setSearch] = useState("");
+class Search extends Component {
+  state = {
+    search: "",
+    results: [],
+  };
 
-  useEffect(() => {
-    if (!search) {
+  // Functions.
+  searchBooks = search => {
+    if (search === "") {
       return;
     }
     API.searchBooks(search)
       .then(res => {
-        if (res.items.length === 0) {
-          throw new Error("No results found.");
-        }
-        setResults(res.items)
+        console.log(res)
+        this.setState({ results: res.data.items })
       })
-      .catch(err => console.error(err))
-  }, [search])
+  }
 
 
   // Form handlers.
-  const handleSubmit = event => {
+  handleSubmit = event => {
     event.preventDefault();
-  }
-  const handleInputChange = event => {
-    setSearch(event.target.value);
-  }
+    this.searchBooks(this.state.search)
+  };
+  handleInputChange = event => {
+    this.setState({ search: event.target.value})
+  };
 
-  return (
-    <div className="container">
-      <Header />
-      <SearchForm 
-        handleSubmit={handleSubmit}
-        handleInputChange={handleInputChange}
-      />
-    </div>
-  )
+  render() {
+    return (
+      <div className="container">
+        <Header />
+        <SearchForm 
+          value={this.state.search}
+          handleSubmit={this.handleSubmit}
+          handleInputChange={this.handleInputChange}
+        />
+        {
+          this.state.search !== "" ? 
+          (<SearchResults 
+            results={this.state.results}
+          />
+          ) : (
+          <p className="text-center">No results to display</p>)
+        }
+      </div>
+    )
+  }
 }
 
 export default Search;
