@@ -8,6 +8,7 @@ class Search extends Component {
   state = {
     search: "",
     results: [],
+    book: []
   };
 
   // Functions.
@@ -21,6 +22,23 @@ class Search extends Component {
         this.setState({ results: res.data.items })
       })
   }
+  
+  saveBook = id => {
+    if (id === "") {
+      return;
+    }
+    API.searchBook(id)
+      .then(book => {
+        console.log(book)
+        API.saveBook({
+          title: book.data.volumeInfo.title,
+          authors: book.data.volumeInfo.authors.join(", "),
+          description: book.data.volumeInfo.description,
+          image: book.data.volumeInfo.imageLinks.smallThumbnail,
+          link: book.data.volumeInfo.infoLink
+        }).catch(err => console.error(err));
+      }).catch(err => console.error(err));
+  }
 
 
   // Form handlers.
@@ -31,6 +49,11 @@ class Search extends Component {
   handleInputChange = event => {
     this.setState({ search: event.target.value})
   };
+  handleButtonClick = event => {
+    event.preventDefault();
+    console.log(event.target.getAttribute('data-id'))
+    this.saveBook(event.target.getAttribute('data-id'))
+  }
 
   render() {
     return (
@@ -41,14 +64,10 @@ class Search extends Component {
           handleSubmit={this.handleSubmit}
           handleInputChange={this.handleInputChange}
         />
-        {
-          this.state.search !== "" ? 
-          (<SearchResults 
-            results={this.state.results}
-          />
-          ) : (
-          <p className="text-center">No results to display</p>)
-        }
+        <SearchResults 
+          results={this.state.results}
+          handleButtonClick={this.handleButtonClick}
+        />
       </div>
     )
   }
